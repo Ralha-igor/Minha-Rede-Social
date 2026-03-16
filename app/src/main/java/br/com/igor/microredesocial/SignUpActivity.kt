@@ -44,7 +44,7 @@ class SignUpActivity : AppCompatActivity() {
 
                     if (task.isSuccessful) {
 
-                        startActivity(Intent(this, HomeActivity::class.java))
+                        startActivity(Intent(this, ProfileActivity::class.java))
                         finish()
 
                     } else {

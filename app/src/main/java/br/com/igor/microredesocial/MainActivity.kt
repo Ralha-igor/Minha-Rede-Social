@@ -22,6 +22,17 @@ class MainActivity : AppCompatActivity() {
         setupListeners()
     }
 
+//    override fun onStart() {
+//        super.onStart()
+//
+//        val user = firebaseAuth.currentUser
+//
+//        if (user != null) {
+//            startActivity(Intent(this, HomeActivity::class.java))
+//            finish()
+//        }
+//    }
+
     private fun setupFirebase() {
         firebaseAuth = FirebaseAuth.getInstance()
     }

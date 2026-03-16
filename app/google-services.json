@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1058377638323",
+    "project_id": "microredesocialralha",
+    "storage_bucket": "microredesocialralha.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058377638323:android:24a3bc644aa71e11f9abc6",
+        "android_client_info": {
+          "package_name": "br.com.igor.microredesocial"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvrXnzdyr77BpPeLBo71PciNHDfOKeV6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

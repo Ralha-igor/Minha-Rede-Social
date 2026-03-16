@@ -1,0 +1,92 @@
+estrutura final:
+usuarios
+ └── userId
+      ├── username
+      ├── nomeCompleto
+      ├── email
+      ├── fotoPerfil
+      └── dataCriacao
+
+
+posts
+ └── postId
+      ├── userId
+      ├── username
+      ├── fotoPerfil
+      ├── texto
+      ├── imagemPost
+      ├── timestamp
+      ├── likesCount
+      ├── comentariosCount
+      │
+      ├── comentarios
+      │    └── comentarioId
+      │         ├── userId
+      │         ├── username
+      │         ├── texto
+      │         └── timestamp
+      │
+      └── likes
+           └── userId
+
+
+🚀 Próximo passo (agora começa a parte de rede social)
+
+Você tinha definido que queria fazer:
+
+✔ salvar perfil
+✔ carregar perfil na Home
+✔ mostrar foto e username
+
+Agora faltam os dois mais importantes:
+
+4️⃣ Criar tela de Criar Post
+
+CreatePostActivity
+
+Campos:
+
+texto do post
+
+imagem opcional
+
+botão publicar
+
+Salva na coleção:
+
+posts
+   └── postId
+        ├── userId
+        ├── username
+        ├── fotoPerfil
+        ├── texto
+        ├── timestamp
+5️⃣ Criar o Feed de Posts
+
+Aqui entra:
+
+RecyclerView
+
+PostAdapter
+
+carregar posts do Firestore
+
+mostrar:
+
+foto do usuário
+
+username
+
+texto do post
+
+Isso transforma seu app em uma mini rede social tipo Twitter/Instagram.
+
+💡 Se quiser, no próximo passo eu posso te mostrar a estrutura completa do Feed:
+
+RecyclerView
+PostAdapter
+PostModel
+item_post.xml
+CreatePostActivity
+
+É a parte mais importante do projeto e normalmente leva uns 15 minutos para montar.

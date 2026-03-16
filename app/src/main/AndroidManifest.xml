@@ -15,7 +15,7 @@
 
         <activity android:name="br.com.igor.microredesocial.HomeActivity" />
         <activity android:name="br.com.igor.microredesocial.SignUpActivity" />
-
+        <activity android:name=".ProfileActivity"/>
 
 
         <activity
