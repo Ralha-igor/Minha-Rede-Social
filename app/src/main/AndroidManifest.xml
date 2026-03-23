@@ -13,13 +13,13 @@
         android:theme="@style/Theme.MicroRedeSocial"
         tools:targetApi="31">
 
-        <activity android:name="br.com.igor.microredesocial.HomeActivity" />
-        <activity android:name="br.com.igor.microredesocial.SignUpActivity" />
-        <activity android:name=".ProfileActivity"/>
+        <activity android:name="br.com.igor.microredesocial.view.HomeActivity" />
+        <activity android:name="br.com.igor.microredesocial.view.SignUpActivity" />
+        <activity android:name=".view.ProfileActivity"/>
 
 
         <activity
-            android:name="br.com.igor.microredesocial.MainActivity"
+            android:name="br.com.igor.microredesocial.view.MainActivity"
             android:exported="true">
 
             <intent-filter>

@@ -1,4 +1,4 @@
-package br.com.igor.microredesocial
+package br.com.igor.microredesocial.view
 
 import android.content.Intent
 import android.os.Bundle

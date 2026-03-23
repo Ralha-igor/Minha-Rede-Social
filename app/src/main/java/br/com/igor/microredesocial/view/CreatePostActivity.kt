@@ -1,16 +1,15 @@
-package br.com.igor.microredesocial
+package br.com.igor.microredesocial.view
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import br.com.igor.microredesocial.controller.PostController
 import br.com.igor.microredesocial.databinding.ActivityCreatePostBinding
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.firestore
-
 
 class CreatePostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreatePostBinding
+    private val postController = PostController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,28 +22,21 @@ class CreatePostActivity : AppCompatActivity() {
         }
     }
 
-    private fun criarPost(){
-
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val email = firebaseAuth.currentUser!!.email
+    private fun criarPost() {
 
         val texto = binding.editPost.text.toString()
 
-        val db = Firebase.firestore
+        if (texto.isEmpty()) {
+            Toast.makeText(this, "Escreva algo para postar", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        val post = hashMapOf(
-            "userId" to email,
-            "texto" to texto,
-            "timestamp" to System.currentTimeMillis(),
-            "likesCount" to 0,
-            "comentariosCount" to 0
-        )
-
-        db.collection("posts")
-            .add(post)
-            .addOnSuccessListener {
+        postController.criarPost(texto) { sucesso, erro ->
+            if (sucesso) {
                 finish()
+            } else {
+                Toast.makeText(this, erro ?: "Erro ao criar post", Toast.LENGTH_SHORT).show()
             }
-
+        }
     }
 }

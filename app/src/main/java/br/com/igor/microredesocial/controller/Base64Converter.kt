@@ -1,4 +1,4 @@
-package br.com.igor.microredesocial
+package br.com.igor.microredesocial.controller
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
