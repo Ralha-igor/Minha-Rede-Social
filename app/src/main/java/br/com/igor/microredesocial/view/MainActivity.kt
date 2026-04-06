@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.igor.microredesocial.controller.AuthController
 import br.com.igor.microredesocial.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class   MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val authController = AuthController()

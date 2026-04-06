@@ -49,7 +49,11 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+// Firebase Storage
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
+// Localização
+    implementation("com.google.android.gms:play-services-location:21.2.0")
     // Firebase
     implementation(libs.firebase.auth)
     implementation("com.google.firebase:firebase-firestore-ktx:24.11.1")

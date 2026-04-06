@@ -45,6 +45,14 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun buscarPorCidade(cidade: String) {
+        postController.buscarPostsPorCidade(cidade) { posts ->
+            val adapter = PostAdapter(posts)
+            binding.recyclerView.layoutManager = LinearLayoutManager(this)
+            binding.recyclerView.adapter = adapter
+        }
+    }
+
     private fun setupListeners() {
 
         binding.btnCarregarFeed.setOnClickListener {
@@ -60,6 +68,15 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+
+        binding.btnBuscarCidade.setOnClickListener {
+            val cidade = binding.editBuscarCidade.text.toString().trim()
+            if (cidade.isEmpty()) {
+                carregarFeed()
+            } else {
+                buscarPorCidade(cidade)
+            }
+        }
     }
 
     private fun carregarFeed() {
@@ -70,4 +87,5 @@ class HomeActivity : AppCompatActivity() {
             binding.recyclerView.adapter = adapter
         }
     }
+
 }
