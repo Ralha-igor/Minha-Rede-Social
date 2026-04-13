@@ -3,7 +3,7 @@ package br.com.igor.microredesocial.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import br.com.igor.microredesocial.controller.Base64Converter
+import br.com.igor.microredesocial.helper.Base64Converter
 import br.com.igor.microredesocial.databinding.PostItemBinding
 import br.com.igor.microredesocial.model.Post
 
@@ -26,14 +26,20 @@ class PostAdapter(private val posts: ArrayList<Post>) :
         holder.binding.textUsername.text = post.username
         holder.binding.textTexto.text = post.texto
 
-        if (post.imagemPost != null) {
+        // 🔥 imagem do post (com proteção extra)
+        if (!post.imagemPost.isNullOrEmpty() && post.imagemPost.length < 1000000) {
             val bitmap = Base64Converter.stringToBitmap(post.imagemPost)
             holder.binding.imagemPost.setImageBitmap(bitmap)
+        } else {
+            holder.binding.imagemPost.setImageBitmap(null)
         }
 
-        if (post.fotoPerfil != null) {
+        // 🔥 foto perfil (com proteção)
+        if (!post.fotoPerfil.isNullOrEmpty() && post.fotoPerfil.length < 1000000) {
             val bitmap = Base64Converter.stringToBitmap(post.fotoPerfil)
             holder.binding.imagemPerfil.setImageBitmap(bitmap)
+        } else {
+            holder.binding.imagemPerfil.setImageBitmap(null)
         }
     }
 

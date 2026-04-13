@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.igor.microredesocial.adapter.PostAdapter
 import br.com.igor.microredesocial.controller.AuthController
-import br.com.igor.microredesocial.controller.Base64Converter
+import br.com.igor.microredesocial.helper.Base64Converter
 import br.com.igor.microredesocial.controller.PostController
 import br.com.igor.microredesocial.controller.UserController
 import br.com.igor.microredesocial.databinding.ActivityHomeBinding
@@ -47,9 +47,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun buscarPorCidade(cidade: String) {
         postController.buscarPostsPorCidade(cidade) { posts ->
-            val adapter = PostAdapter(posts)
-            binding.recyclerView.layoutManager = LinearLayoutManager(this)
-            binding.recyclerView.adapter = adapter
+            runOnUiThread {
+                val adapter = PostAdapter(posts)
+                binding.recyclerView.layoutManager = LinearLayoutManager(this)
+                binding.recyclerView.adapter = adapter
+            }
         }
     }
 
@@ -80,11 +82,12 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun carregarFeed() {
-
         postController.buscarPosts { posts ->
-            val adapter = PostAdapter(posts)
-            binding.recyclerView.layoutManager = LinearLayoutManager(this)
-            binding.recyclerView.adapter = adapter
+            runOnUiThread {
+                val adapter = PostAdapter(posts)
+                binding.recyclerView.layoutManager = LinearLayoutManager(this)
+                binding.recyclerView.adapter = adapter
+            }
         }
     }
 

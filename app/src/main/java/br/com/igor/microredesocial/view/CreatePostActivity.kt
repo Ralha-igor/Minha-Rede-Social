@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import br.com.igor.microredesocial.controller.LocationController
+import br.com.igor.microredesocial.helper.LocationController
 import br.com.igor.microredesocial.controller.PostController
 import br.com.igor.microredesocial.databinding.ActivityCreatePostBinding
 
@@ -102,7 +102,7 @@ class CreatePostActivity : AppCompatActivity() {
 
         postController.criarPost(
             texto = texto,
-            imageUri = imagemSelecionada,
+            imageView = binding.imagePreview,  // <- passa o ImageView
             city = cidadeAtual,
             lat = latAtual,
             lng = lngAtual

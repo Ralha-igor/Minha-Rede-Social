@@ -13,8 +13,7 @@ class UserController {
             .document(email)
             .get()
             .addOnSuccessListener { document ->
-
-                if (document != null) {
+                if (document != null && document.exists()) { // <- adiciona .exists()
                     val user = User(
                         email = document.getString("email") ?: "",
                         username = document.getString("username") ?: "",

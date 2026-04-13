@@ -1,79 +1,57 @@
-    package br.com.igor.microredesocial.controller
+package br.com.igor.microredesocial.controller
 
-    import br.com.igor.microredesocial.model.Post
-    import android.net.Uri
-    import com.google.firebase.auth.FirebaseAuth
-    import com.google.firebase.firestore.FirebaseFirestore
-    import com.google.firebase.storage.FirebaseStorage
-    import java.util.UUID
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.widget.ImageView
+import br.com.igor.microredesocial.helper.Base64Converter
+import br.com.igor.microredesocial.model.Post
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-    class PostController {
+class PostController {
 
-        private val db = FirebaseFirestore.getInstance()
-        private val auth = FirebaseAuth.getInstance()
-        private val storage = FirebaseStorage.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
-        // Agora recebe imageUri e dados de localização opcionais
-        fun criarPost(
-            texto: String,
-            imageUri: Uri? = null,
-            city: String = "",
-            lat: Double = 0.0,
-            lng: Double = 0.0,
-            onResult: (Boolean, String?) -> Unit
-        ) {
-            val email = auth.currentUser?.email
-            if (email == null) {
-                onResult(false, "Usuário não autenticado")
-                return
-            }
-
-            if (imageUri != null) {
-                // Se tem imagem, faz upload primeiro, depois salva o post
-                uploadImagem(imageUri) { urlImagem, erro ->
-                    if (erro != null) {
-                        onResult(false, erro)
-                        return@uploadImagem
-                    }
-                    salvarPost(email, texto, urlImagem, city, lat, lng, onResult)
-                }
-            } else {
-                // Sem imagem, salva direto
-                salvarPost(email, texto, null, city, lat, lng, onResult)
-            }
+    fun criarPost(
+        texto: String,
+        imageUri: Uri? = null,
+        imageView: ImageView? = null,
+        city: String = "",
+        lat: Double = 0.0,
+        lng: Double = 0.0,
+        onResult: (Boolean, String?) -> Unit
+    ) {
+        val email = auth.currentUser?.email
+        if (email == null) {
+            onResult(false, "Usuário não autenticado")
+            return
         }
 
-        private fun uploadImagem(uri: Uri, onResult: (String?, String?) -> Unit) {
-            val nomeArquivo = UUID.randomUUID().toString()
-            val ref = storage.reference.child("posts/$nomeArquivo.jpg")
+        // Converte imagem para Base64 se houver
+        val imagemBase64 = if (imageView != null) {
+            val drawable = imageView.drawable
+            if (drawable != null && drawable is BitmapDrawable) {
+                Base64Converter.drawableToString(drawable)
+            } else ""
+        } else ""
 
-            ref.putFile(uri)
-                .addOnSuccessListener {
-                    ref.downloadUrl.addOnSuccessListener { url ->
-                        onResult(url.toString(), null)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    onResult(null, e.message)
-                }
-        }
+        val userController = UserController()
+        userController.buscarPerfil(email) { user ->
+            if (user == null) {
+                onResult(false, "Usuário não encontrado")
+                return@buscarPerfil
+            }
 
-        private fun salvarPost(
-            email: String,
-            texto: String,
-            imagemUrl: String?,
-            city: String,
-            lat: Double,
-            lng: Double,
-            onResult: (Boolean, String?) -> Unit
-        ) {
             val post = hashMapOf(
                 "userId" to email,
+                "username" to user.username,
+                "fotoPerfil" to (user.fotoPerfil ?: ""),
                 "texto" to texto,
                 "timestamp" to System.currentTimeMillis(),
                 "likesCount" to 0,
                 "comentarioCount" to 0,
-                "imagemPost" to (imagemUrl ?: ""),
+                "imagemPost" to imagemBase64,
                 "city" to city,
                 "lat" to lat,
                 "lng" to lng
@@ -84,62 +62,58 @@
                 .addOnSuccessListener { onResult(true, null) }
                 .addOnFailureListener { e -> onResult(false, e.message) }
         }
-
-        fun buscarPosts(onResult: (ArrayList<Post>) -> Unit) {
-            db.collection("posts")
-                .get()
-                .addOnSuccessListener { documents ->
-                    val posts = ArrayList<Post>()
-                    for (document in documents) {
-                        val post = Post(
-                            userId = document.getString("userId") ?: "",
-                            username = document.getString("username") ?: "",
-                            texto = document.getString("texto") ?: "",
-                            fotoPerfil = document.getString("fotoPerfil"),
-                            imagemPost = document.getString("imagemPost"),
-                            timestamp = document.getLong("timestamp") ?: 0L,
-                            likesCount = document.getLong("likesCount")?.toInt() ?: 0,
-                            comentarioCount = document.getLong("comentarioCount")?.toInt() ?: 0,
-                            city = document.getString("city") ?: "",
-                            lat = document.getDouble("lat") ?: 0.0,
-                            lng = document.getDouble("lng") ?: 0.0
-                        )
-                        posts.add(post)
-                    }
-                    onResult(posts)
-                }
-                .addOnFailureListener {
-                    onResult(ArrayList())
-                }
-        }
-
-        // Sprint 6 — busca por cidade
-        fun buscarPostsPorCidade(city: String, onResult: (ArrayList<Post>) -> Unit) {
-            db.collection("posts")
-                .whereEqualTo("city", city)
-                .get()
-                .addOnSuccessListener { documents ->
-                    val posts = ArrayList<Post>()
-                    for (document in documents) {
-                        val post = Post(
-                            userId = document.getString("userId") ?: "",
-                            username = document.getString("username") ?: "",
-                            texto = document.getString("texto") ?: "",
-                            fotoPerfil = document.getString("fotoPerfil"),
-                            imagemPost = document.getString("imagemPost"),
-                            timestamp = document.getLong("timestamp") ?: 0L,
-                            likesCount = document.getLong("likesCount")?.toInt() ?: 0,
-                            comentarioCount = document.getLong("comentarioCount")?.toInt() ?: 0,
-                            city = document.getString("city") ?: "",
-                            lat = document.getDouble("lat") ?: 0.0,
-                            lng = document.getDouble("lng") ?: 0.0
-                        )
-                        posts.add(post)
-                    }
-                    onResult(posts)
-                }
-                .addOnFailureListener {
-                    onResult(ArrayList())
-                }
-        }
     }
+
+    fun buscarPosts(onResult: (ArrayList<Post>) -> Unit) {
+        db.collection("posts")
+            .get()
+            .addOnSuccessListener { documents ->
+                val posts = ArrayList<Post>()
+                for (document in documents) {
+                    val post = Post(
+                        userId = document.getString("userId") ?: "",
+                        username = document.getString("username") ?: "",
+                        texto = document.getString("texto") ?: "",
+                        fotoPerfil = document.getString("fotoPerfil"),
+                        imagemPost = document.getString("imagemPost"),
+                        timestamp = document.getLong("timestamp") ?: 0L,
+                        likesCount = (document.get("likesCount") as? Long)?.toInt() ?: 0,
+                        comentarioCount = (document.get("comentarioCount") as? Long)?.toInt() ?: 0,
+                        city = document.getString("city") ?: "",
+                        lat = document.getDouble("lat") ?: 0.0,
+                        lng = document.getDouble("lng") ?: 0.0
+                    )
+                    posts.add(post)
+                }
+                onResult(posts)
+            }
+            .addOnFailureListener { onResult(ArrayList()) }
+    }
+
+    fun buscarPostsPorCidade(city: String, onResult: (ArrayList<Post>) -> Unit) {
+        db.collection("posts")
+            .whereEqualTo("city", city)
+            .get()
+            .addOnSuccessListener { documents ->
+                val posts = ArrayList<Post>()
+                for (document in documents) {
+                    val post = Post(
+                        userId = document.getString("userId") ?: "",
+                        username = document.getString("username") ?: "",
+                        texto = document.getString("texto") ?: "",
+                        fotoPerfil = document.getString("fotoPerfil"),
+                        imagemPost = document.getString("imagemPost"),
+                        timestamp = document.getLong("timestamp") ?: 0L,
+                        likesCount = document.getString("likesCount")?.toInt() ?: 0,
+                        comentarioCount = document.getLong("comentarioCount")?.toInt() ?: 0,
+                        city = document.getString("city") ?: "",
+                        lat = document.getDouble("lat") ?: 0.0,
+                        lng = document.getDouble("lng") ?: 0.0
+                    )
+                    posts.add(post)
+                }
+                onResult(posts)
+            }
+            .addOnFailureListener { onResult(ArrayList()) }
+    }
+}

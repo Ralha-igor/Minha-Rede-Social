@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import br.com.igor.microredesocial.controller.UserController
 import br.com.igor.microredesocial.databinding.ActivitySignUpBinding
+import br.com.igor.microredesocial.model.User
 import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
@@ -43,18 +45,24 @@ class SignUpActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
 
                     if (task.isSuccessful) {
+                        // Salva o usuário no Firestore após criar a conta
+                        val userController = UserController()
+                        val novoUsuario = User(
+                            email = email,
+                            username = "",        // preenchido na ProfileActivity
+                            nomecompleto = "",    // preenchido na ProfileActivity
+                            fotoPerfil = null,
+                            dataCriacao = System.currentTimeMillis()
+                        )
 
-                        startActivity(Intent(this, ProfileActivity::class.java))
-                        finish()
-
-                    } else {
-
-                        Toast.makeText(
-                            this,
-                            task.exception?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-
+                        userController.salvarPerfil(novoUsuario) { sucesso, erro ->
+                            if (sucesso) {
+                                startActivity(Intent(this, ProfileActivity::class.java))
+                                finish()
+                            } else {
+                                Toast.makeText(this, erro ?: "Erro ao salvar perfil", Toast.LENGTH_LONG).show()
+                            }
+                        }
                     }
 
                 }

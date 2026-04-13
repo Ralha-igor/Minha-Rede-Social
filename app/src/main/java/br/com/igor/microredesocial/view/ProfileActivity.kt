@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import br.com.igor.microredesocial.controller.Base64Converter
+import br.com.igor.microredesocial.helper.Base64Converter
 import br.com.igor.microredesocial.controller.UserController
 import br.com.igor.microredesocial.databinding.ActivityProfileBinding
 import br.com.igor.microredesocial.model.User
