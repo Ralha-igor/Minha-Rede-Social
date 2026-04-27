@@ -26,6 +26,14 @@ class PostAdapter(private val posts: ArrayList<Post>) :
         holder.binding.textUsername.text = post.username
         holder.binding.textTexto.text = post.texto
 
+        // ✅ CORREÇÃO AQUI: Alterado de 'localizacao' para 'city'
+        // Também adicionamos o ícone de pin 📍 antes do texto para dar o charme final
+        if (post.city.isNotEmpty()) {
+            holder.binding.textLocalizacao.text = "📍 ${post.city}"
+        } else {
+            holder.binding.textLocalizacao.text = "📍 Localização não informada"
+        }
+
         // 🔥 imagem do post (com proteção extra)
         if (!post.imagemPost.isNullOrEmpty() && post.imagemPost.length < 1000000) {
             val bitmap = Base64Converter.stringToBitmap(post.imagemPost)
@@ -40,6 +48,15 @@ class PostAdapter(private val posts: ArrayList<Post>) :
             holder.binding.imagemPerfil.setImageBitmap(bitmap)
         } else {
             holder.binding.imagemPerfil.setImageBitmap(null)
+        }
+        // Exemplo: "📍 Mountain View, CA" Geocodificação Completa
+        if (post.city.isNotEmpty()) {
+            holder.binding.textLocalizacao.text = "📍 ${post.city}, California"
+        }
+        if (post.city.isNotEmpty()) {
+            // Exibe a cidade e as coordenadas em uma linha menor
+            val localizacaoCompleta = "📍 ${post.city} (${post.lat}, ${post.lng})"
+            holder.binding.textLocalizacao.text = localizacaoCompleta
         }
     }
 

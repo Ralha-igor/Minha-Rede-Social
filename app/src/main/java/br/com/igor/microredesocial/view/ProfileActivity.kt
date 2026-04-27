@@ -29,16 +29,13 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        carregarPerfilAtual() // NOVO: carrega dados existentes
+
         binding.buttonAlterarFoto.setOnClickListener {
-            galeria.launch(
-                PickVisualMediaRequest(
-                    ActivityResultContracts.PickVisualMedia.ImageOnly
-                )
-            )
+            galeria.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
         binding.buttonSalvar.setOnClickListener {
@@ -46,10 +43,25 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun carregarPerfilAtual() {
+        val email = FirebaseAuth.getInstance().currentUser?.email ?: return
+        val userController = UserController()
+        userController.buscarPerfil(email) { user ->
+            runOnUiThread {
+                if (user != null) {
+                    binding.editUsername.setText(user.username)
+                    binding.editNomeCompleto.setText(user.nomecompleto)
+                    if (!user.fotoPerfil.isNullOrEmpty()) {
+                        val bitmap = Base64Converter.stringToBitmap(user.fotoPerfil)
+                        binding.imageProfile.setImageBitmap(bitmap)
+                    }
+                }
+            }
+        }
+    }
+
     private fun salvarPerfil() {
-
         val email = FirebaseAuth.getInstance().currentUser?.email
-
         if (email == null) {
             Toast.makeText(this, "Usuário não autenticado", Toast.LENGTH_SHORT).show()
             return
@@ -57,18 +69,25 @@ class ProfileActivity : AppCompatActivity() {
 
         val username = binding.editUsername.text.toString()
         val nomeCompleto = binding.editNomeCompleto.text.toString()
+        val novaSenha = binding.editSenha.text.toString() // precisa ter esse campo no XML
 
         if (username.isEmpty() || nomeCompleto.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
             return
         }
 
+        // Atualiza senha se preenchida
+        if (novaSenha.isNotEmpty()) {
+            FirebaseAuth.getInstance().currentUser?.updatePassword(novaSenha)
+                ?.addOnFailureListener {
+                    Toast.makeText(this, "Erro ao atualizar senha: ${it.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+
         val drawable = binding.imageProfile.drawable
         val fotoPerfilString = if (drawable != null && drawable is android.graphics.drawable.BitmapDrawable) {
             Base64Converter.drawableToString(drawable)
-        } else {
-            ""
-        }
+        } else ""
 
         val user = User(
             email = email,
@@ -79,11 +98,14 @@ class ProfileActivity : AppCompatActivity() {
         )
 
         userController.salvarPerfil(user) { sucesso, erro ->
-            if (sucesso) {
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
-            } else {
-                Toast.makeText(this, erro ?: "Erro ao salvar", Toast.LENGTH_SHORT).show()
+            runOnUiThread {
+                if (sucesso) {
+                    Toast.makeText(this, "Perfil atualizado!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this, erro ?: "Erro ao salvar", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

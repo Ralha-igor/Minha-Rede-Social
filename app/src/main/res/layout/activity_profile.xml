@@ -38,6 +38,14 @@
             android:hint="Nome Completo"
             android:layout_marginBottom="32dp"/>
 
+        <EditText
+            android:id="@+id/editSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nova senha (deixe vazio para não alterar)"
+            android:inputType="textPassword"
+            android:layout_margin="8dp"/>
+
         <Button
             android:id="@+id/buttonSalvar"
             android:layout_width="match_parent"

@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.igor.microredesocial.controller.AuthController
 import br.com.igor.microredesocial.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class   MainActivity : AppCompatActivity() {
 
@@ -17,6 +18,12 @@ class   MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+            return
+        }
 
         setupListeners()
     }

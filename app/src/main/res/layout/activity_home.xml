@@ -3,93 +3,132 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F8F9FA">
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardHeader"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sair"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:cardElevation="4dp"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/imageProfile"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/btnLogout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textUsername"
-        android:layout_width="wrap_content"
+            <ImageButton
+                android:id="@+id/btnLogout"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_lock_power_off"
+                app:tint="#B00020"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardProfileFrame"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/imageProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_gallery" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/textUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@username"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/cardProfileFrame"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/layoutActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/textUsername">
+
+                <Button
+                    android:id="@+id/btnCarregarFeed"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:text="Atualizar"
+                    android:textAllCaps="false"
+                    app:cornerRadius="12dp"/>
+
+                <Button
+                    android:id="@+id/btnNovoPost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:text="Novo Post"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#6200EE"
+                    app:cornerRadius="12dp"/>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/searchContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/imageProfile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:orientation="horizontal"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/cardHeader">
 
-    <Button
-        android:id="@+id/btnCarregarFeed"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Carregar Feed"
-        android:textAllCaps="false"
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/textUsername"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <EditText
+            android:id="@+id/editBuscarCidade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Buscar cidade..."
+            android:background="@drawable/edit_text_rounded"
+            android:inputType="text"
+            android:padding="10dp"
+            android:layout_marginEnd="8dp"/>
 
-    <Button
-        android:id="@+id/btnNovoPost"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Novo Post"
-        android:textAllCaps="false"
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/btnCarregarFeed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <ImageButton
+            android:id="@+id/btnBuscarCidade"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/edit_text_rounded"
+            android:src="@android:drawable/ic_menu_search"
+            app:tint="#6200EE"/>
+    </LinearLayout>
 
-    <!-- Campo de busca — aponta para btnNovoPost -->
-    <EditText
-        android:id="@+id/editBuscarCidade"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Buscar por cidade..."
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/btnNovoPost"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- Botão buscar — aponta para editBuscarCidade -->
-    <Button
-        android:id="@+id/btnBuscarCidade"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Buscar"
-        android:textAllCaps="false"
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/editBuscarCidade"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- RecyclerView — aponta para btnBuscarCidade -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/btnBuscarCidade"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/searchContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

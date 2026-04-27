@@ -38,8 +38,10 @@ class PostController {
 
         val userController = UserController()
         userController.buscarPerfil(email) { user ->
+            android.util.Log.d("DEBUG_POST", "email buscado: $email")
+            android.util.Log.d("DEBUG_POST", "user retornado: $user")
             if (user == null) {
-                onResult(false, "Usuário não encontrado")
+                onResult(false, "Usuário não encontrado - email: $email")
                 return@buscarPerfil
             }
 
@@ -64,9 +66,20 @@ class PostController {
         }
     }
 
-    fun buscarPosts(onResult: (ArrayList<Post>) -> Unit) {
-        db.collection("posts")
-            .get()
+    private var ultimoDocumento: com.google.firebase.firestore.DocumentSnapshot? = null
+
+    fun buscarPosts(carrregarMais: Boolean = false, onResult: (ArrayList<Post>, temMais: Boolean) -> Unit) {
+        var query = db.collection("posts")
+            .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .limit(5)
+
+        if (carrregarMais && ultimoDocumento != null) {
+            query = query.startAfter(ultimoDocumento!!)
+        } else {
+            ultimoDocumento = null // reset
+        }
+
+        query.get()
             .addOnSuccessListener { documents ->
                 val posts = ArrayList<Post>()
                 for (document in documents) {
@@ -85,9 +98,12 @@ class PostController {
                     )
                     posts.add(post)
                 }
-                onResult(posts)
+                if (documents.size() > 0) {
+                    ultimoDocumento = documents.documents.last()
+                }
+                onResult(posts, documents.size() >= 5)
             }
-            .addOnFailureListener { onResult(ArrayList()) }
+            .addOnFailureListener { onResult(ArrayList(), false) }
     }
 
     fun buscarPostsPorCidade(city: String, onResult: (ArrayList<Post>) -> Unit) {
@@ -97,23 +113,33 @@ class PostController {
             .addOnSuccessListener { documents ->
                 val posts = ArrayList<Post>()
                 for (document in documents) {
-                    val post = Post(
-                        userId = document.getString("userId") ?: "",
-                        username = document.getString("username") ?: "",
-                        texto = document.getString("texto") ?: "",
-                        fotoPerfil = document.getString("fotoPerfil"),
-                        imagemPost = document.getString("imagemPost"),
-                        timestamp = document.getLong("timestamp") ?: 0L,
-                        likesCount = document.getString("likesCount")?.toInt() ?: 0,
-                        comentarioCount = document.getLong("comentarioCount")?.toInt() ?: 0,
-                        city = document.getString("city") ?: "",
-                        lat = document.getDouble("lat") ?: 0.0,
-                        lng = document.getDouble("lng") ?: 0.0
-                    )
-                    posts.add(post)
+                    try {
+                        val post = Post(
+                            userId = document.getString("userId") ?: "",
+                            username = document.getString("username") ?: "",
+                            texto = document.getString("texto") ?: "",
+                            fotoPerfil = document.getString("fotoPerfil"),
+                            imagemPost = document.getString("imagemPost"),
+                            timestamp = document.getLong("timestamp") ?: 0L,
+
+                            // ✅ CORREÇÃO: likesCount e comentarioCount devem usar getLong()
+                            likesCount = document.getLong("likesCount")?.toInt() ?: 0,
+                            comentarioCount = document.getLong("comentarioCount")?.toInt() ?: 0,
+
+                            city = document.getString("city") ?: "",
+                            lat = document.getDouble("lat") ?: 0.0,
+                            lng = document.getDouble("lng") ?: 0.0
+                        )
+                        posts.add(post)
+                    } catch (e: Exception) {
+                        // Evita que um post mal formatado quebre a lista inteira
+                        e.printStackTrace()
+                    }
                 }
                 onResult(posts)
             }
-            .addOnFailureListener { onResult(ArrayList()) }
+            .addOnFailureListener {
+                onResult(ArrayList())
+            }
     }
 }
