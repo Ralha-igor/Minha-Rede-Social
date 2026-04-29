@@ -84,6 +84,7 @@ class PostController {
                 val posts = ArrayList<Post>()
                 for (document in documents) {
                     val post = Post(
+                        postId = document.id,
                         userId = document.getString("userId") ?: "",
                         username = document.getString("username") ?: "",
                         texto = document.getString("texto") ?: "",
@@ -141,5 +142,35 @@ class PostController {
             .addOnFailureListener {
                 onResult(ArrayList())
             }
+    }
+
+    fun deletarPost(postId: String, onResult: (Boolean, String?) -> Unit) {
+        val emailAtual = auth.currentUser?.email
+        if (emailAtual == null) {
+            onResult(false, "Usuário não autenticado")
+            return
+        }
+
+        db.collection("posts").document(postId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.exists()) {
+                    onResult(false, "Post não encontrado")
+                    return@addOnSuccessListener
+                }
+
+                // Só permite deletar se for o dono do post
+                val userId = document.getString("userId")
+                if (userId != emailAtual) {
+                    onResult(false, "Você não pode deletar este post")
+                    return@addOnSuccessListener
+                }
+
+                db.collection("posts").document(postId)
+                    .delete()
+                    .addOnSuccessListener { onResult(true, null) }
+                    .addOnFailureListener { e -> onResult(false, e.message) }
+            }
+            .addOnFailureListener { e -> onResult(false, e.message) }
     }
 }

@@ -31,7 +31,18 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = PostAdapter(listaPosts)
+        adapter = PostAdapter(listaPosts) { postId, position ->
+            postController.deletarPost(postId) { sucesso, erro ->
+                runOnUiThread {
+                    if (sucesso) {
+                        adapter.removerPost(position)
+                    } else {
+                        Toast.makeText(this, erro ?: "Erro ao deletar", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
@@ -87,7 +98,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    // ✅ VERSÃO CORRETA E ESTILIZADA (Mantenha apenas esta)
     private fun exibirAvisoFormato() {
         val view = layoutInflater.inflate(R.layout.dialog_custom_aviso, null)
         val builder = AlertDialog.Builder(this)
@@ -122,11 +132,8 @@ class HomeActivity : AppCompatActivity() {
 
         binding.btnBuscarCidade.setOnClickListener {
             val cidade = binding.editBuscarCidade.text.toString().trim()
-            if (cidade.isEmpty()) {
-                carregarFeed()
-            } else {
-                buscarPorCidade(cidade)
-            }
+            if (cidade.isEmpty()) carregarFeed()
+            else buscarPorCidade(cidade)
         }
     }
 

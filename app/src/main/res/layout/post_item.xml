@@ -102,6 +102,15 @@
                 android:src="@android:drawable/btn_star_big_off"
                 app:tint="#757575" />
 
+            <ImageButton
+                android:id="@+id/btnDeletar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_delete"
+                android:layout_marginStart="8dp"
+                app:tint="#B00020" />
+
         </LinearLayout>
 
     </LinearLayout>

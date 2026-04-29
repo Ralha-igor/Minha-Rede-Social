@@ -1,6 +1,7 @@
 package br.com.igor.microredesocial.model
 
 data class Post(
+    val postId: String = "",
     val userId: String = "",
     val username: String = "",
     val texto: String = "",
