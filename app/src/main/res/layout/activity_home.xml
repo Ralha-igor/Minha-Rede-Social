@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA">
+    android:background="#000000">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="4dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="#121212"
         app:cardCornerRadius="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -25,16 +26,18 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_lock_power_off"
-                app:tint="#B00020"
+                app:tint="#FF5252"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="Sair" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardProfileFrame"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:cardCornerRadius="30dp"
-                app:cardElevation="0dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:cardCornerRadius="35dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#333333"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -51,11 +54,11 @@
                 android:id="@+id/textUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@username"
-                android:textSize="16sp"
+                android:text="\@usuario"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
-                android:layout_marginTop="8dp"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@id/cardProfileFrame"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -65,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@id/textUsername">
 
                 <Button
@@ -74,7 +77,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginEnd="6dp"
+                    android:textColor="#BB86FC"
+                    app:strokeColor="#BB86FC"
                     android:text="Atualizar"
                     android:textAllCaps="false"
                     app:cornerRadius="12dp"/>
@@ -84,10 +89,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="6dp"
                     android:text="Novo Post"
                     android:textAllCaps="false"
-                    android:backgroundTint="#6200EE"
+                    android:textColor="#000000"
+                    android:backgroundTint="#BB86FC"
+                    android:textStyle="bold"
                     app:cornerRadius="12dp"/>
             </LinearLayout>
 
@@ -99,19 +106,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:padding="16dp"
+        android:background="#000000"
         app:layout_constraintTop_toBottomOf="@id/cardHeader">
 
         <EditText
             android:id="@+id/editBuscarCidade"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:hint="Buscar cidade..."
+            android:textColorHint="#666666"
+            android:textColor="#FFFFFF"
             android:background="@drawable/edit_text_rounded"
             android:inputType="text"
-            android:padding="10dp"
-            android:layout_marginEnd="8dp"/>
+            android:paddingHorizontal="16dp"
+            android:layout_marginEnd="10dp"
+            android:importantForAutofill="no" />
 
         <ImageButton
             android:id="@+id/btnBuscarCidade"
@@ -119,7 +130,8 @@
             android:layout_height="48dp"
             android:background="@drawable/edit_text_rounded"
             android:src="@android:drawable/ic_menu_search"
-            app:tint="#6200EE"/>
+            app:tint="#BB86FC"
+            android:contentDescription="Buscar" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -128,9 +140,8 @@
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:paddingBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/searchContainer"
+        android:background="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/searchContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

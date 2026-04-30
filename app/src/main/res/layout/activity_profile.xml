@@ -1,56 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#000000">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:padding="24dp">
 
-        <ImageView
-            android:id="@+id/imageProfile"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/empty_profile"
-            android:layout_marginBottom="16dp"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="70dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#121212">
+
+            <ImageView
+                android:id="@+id/imageProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/empty_profile"
+                android:contentDescription="Foto de Perfil" />
+        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/buttonAlterarFoto"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ALTERAR FOTO"
+            android:textColor="#BB86FC"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="32dp"/>
 
-        <EditText
-            android:id="@+id/editUsername"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nome de usuário (público)"
-            android:layout_marginBottom="16dp"/>
+            android:textColorHint="#666666"
+            app:hintTextColor="#BB86FC"
+            app:boxStrokeColor="#BB86FC"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/editNomeCompleto"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:importantForAutofill="no" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nome Completo"
-            android:layout_marginBottom="32dp"/>
+            android:textColorHint="#666666"
+            app:hintTextColor="#BB86FC"
+            app:boxStrokeColor="#BB86FC"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/editSenha"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editNomeCompleto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nova senha (deixe vazio para não alterar)"
-            android:inputType="textPassword"
-            android:layout_margin="8dp"/>
+            android:hint="Nova senha (opcional)"
+            android:textColorHint="#666666"
+            app:hintTextColor="#BB86FC"
+            app:boxStrokeColor="#BB86FC"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="#666666"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            android:layout_marginBottom="40dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="#FFFFFF" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/buttonSalvar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SALVAR"/>
+            android:layout_height="56dp"
+            android:text="SALVAR ALTERAÇÕES"
+            android:backgroundTint="#BB86FC"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:cornerRadius="12dp" />
 
     </LinearLayout>
 

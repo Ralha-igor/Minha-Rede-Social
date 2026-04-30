@@ -64,6 +64,7 @@ class PostController {
                 .addOnSuccessListener { onResult(true, null) }
                 .addOnFailureListener { e -> onResult(false, e.message) }
         }
+
     }
 
     private var ultimoDocumento: com.google.firebase.firestore.DocumentSnapshot? = null
@@ -171,6 +172,19 @@ class PostController {
                     .addOnSuccessListener { onResult(true, null) }
                     .addOnFailureListener { e -> onResult(false, e.message) }
             }
+            .addOnFailureListener { e -> onResult(false, e.message) }
+    }
+
+    fun atualizarPost(postId: String, novoTexto: String, onResult: (Boolean, String?) -> Unit) {
+        val emailAtual = auth.currentUser?.email
+        if (emailAtual == null) {
+            onResult(false, "Usuário não autenticado")
+            return
+        }
+
+        db.collection("posts").document(postId)
+            .update("texto", novoTexto)
+            .addOnSuccessListener { onResult(true, null) }
             .addOnFailureListener { e -> onResult(false, e.message) }
     }
 }

@@ -21,6 +21,8 @@
         <activity android:name="br.com.igor.microredesocial.view.SignUpActivity" />
         <activity android:name=".view.ProfileActivity"/>
         <activity android:name="br.com.igor.microredesocial.view.CreatePostActivity" />
+        <activity android:name=".view.EditarPostActivity" />
+
 
 
         <activity

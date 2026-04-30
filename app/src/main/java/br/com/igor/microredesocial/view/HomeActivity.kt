@@ -31,24 +31,37 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = PostAdapter(listaPosts) { postId, position ->
-            postController.deletarPost(postId) { sucesso, erro ->
-                runOnUiThread {
-                    if (sucesso) {
-                        adapter.removerPost(position)
-                    } else {
-                        Toast.makeText(this, erro ?: "Erro ao deletar", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = adapter
-
+        configurarAdapter()
+        configurarRecyclerView()
         carregarPerfil()
         carregarFeed()
         setupListeners()
+    }
+
+    private fun configurarAdapter() {
+        adapter = PostAdapter(
+            listaPosts,
+            onDeletar = { postId, position ->
+                postController.deletarPost(postId) { sucesso, erro ->
+                    runOnUiThread {
+                        if (sucesso) adapter.removerPost(position)
+                        else Toast.makeText(this, erro ?: "Erro ao deletar", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            },
+            onEditar = { post ->
+                val intent = Intent(this, EditarPostActivity::class.java).apply {
+                    putExtra("postId", post.postId)
+                    putExtra("textoAtual", post.texto)
+                }
+                startActivity(intent)
+            }
+        )
+    }
+
+    private fun configurarRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = adapter
     }
 
     private fun carregarPerfil() {
@@ -100,11 +113,10 @@ class HomeActivity : AppCompatActivity() {
 
     private fun exibirAvisoFormato() {
         val view = layoutInflater.inflate(R.layout.dialog_custom_aviso, null)
-        val builder = AlertDialog.Builder(this)
-        builder.setView(view)
-
-        val dialog = builder.create()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        val dialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+            .also { it.window?.setBackgroundDrawableResource(android.R.color.transparent) }
 
         view.findViewById<Button>(R.id.btnEntendi).setOnClickListener {
             dialog.dismiss()
