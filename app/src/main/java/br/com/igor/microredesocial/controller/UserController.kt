@@ -7,13 +7,12 @@ class UserController {
 
     private val db = FirebaseFirestore.getInstance()
 
-    fun buscarPerfil(email: String, onResult: (User?) -> Unit) {
-
+    fun buscarPerfil(uid: String, onResult: (User?) -> Unit) {
         db.collection("usuarios")
-            .document(email)
+            .document(uid)
             .get()
             .addOnSuccessListener { document ->
-                if (document != null && document.exists()) { // <- adiciona .exists()
+                if (document != null && document.exists()) {
                     val user = User(
                         email = document.getString("email") ?: "",
                         username = document.getString("username") ?: "",
@@ -29,8 +28,7 @@ class UserController {
             .addOnFailureListener { onResult(null) }
     }
 
-    fun salvarPerfil(user: User, onResult: (Boolean, String?) -> Unit) {
-
+    fun salvarPerfil(uid: String, user: User, onResult: (Boolean, String?) -> Unit) {
         val dados = hashMapOf(
             "email" to user.email,
             "username" to user.username,
@@ -40,7 +38,7 @@ class UserController {
         )
 
         db.collection("usuarios")
-            .document(user.email)
+            .document(uid)
             .set(dados)
             .addOnSuccessListener { onResult(true, null) }
             .addOnFailureListener { e -> onResult(false, e.message) }

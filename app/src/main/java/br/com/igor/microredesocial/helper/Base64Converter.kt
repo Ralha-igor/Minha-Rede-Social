@@ -27,11 +27,11 @@ class Base64Converter {
 
         fun stringToBitmap(imageString: String): Bitmap? {
             return try {
-                val imageBytes = Base64.decode(imageString, Base64.DEFAULT)
+                val base64Puro = imageString.removePrefix("data:image/jpeg;base64,")
+                val imageBytes = Base64.decode(base64Puro, Base64.DEFAULT)
 
-                // 🔥 proteção contra crash de memória
                 val options = BitmapFactory.Options().apply {
-                    inSampleSize = 2 // reduz resolução pela metade
+                    inSampleSize = 2
                 }
 
                 BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, options)

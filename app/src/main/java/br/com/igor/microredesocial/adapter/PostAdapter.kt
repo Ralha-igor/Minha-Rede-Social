@@ -64,7 +64,8 @@ class PostAdapter(
         position: Int,
         emailAtual: String?
     ) {
-        val isDono = post.userId == emailAtual
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        val isDono = post.userId == uid || post.userId == emailAtual
 
         holder.binding.btnDeletar.visibility = if (isDono) View.VISIBLE else View.GONE
         holder.binding.btnEditar.visibility = if (isDono) View.VISIBLE else View.GONE

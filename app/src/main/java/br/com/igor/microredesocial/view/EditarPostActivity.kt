@@ -13,18 +13,24 @@ class EditarPostActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Inicializa o View Binding apontando para o layout correto
         binding = ActivityEditarPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Resgata os dados enviados pela tela anterior
         val postId = intent.getStringExtra("postId") ?: return
         val textoAtual = intent.getStringExtra("textoAtual") ?: ""
 
+        // Insere o texto antigo no campo de edição
         binding.editTextoPost.setText(textoAtual)
 
+        // Salvar alterações
         binding.btnSalvarEdicao.setOnClickListener {
             salvarEdicao(postId)
         }
 
+        // Cancelar e voltar
         binding.btnCancelarEdicao.setOnClickListener {
             finish()
         }

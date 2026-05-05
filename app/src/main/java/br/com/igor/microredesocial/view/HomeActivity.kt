@@ -65,8 +65,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun carregarPerfil() {
-        val email = FirebaseAuth.getInstance().currentUser?.email ?: return
-        userController.buscarPerfil(email) { user ->
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        userController.buscarPerfil(uid) { user ->
             runOnUiThread {
                 if (user != null) {
                     binding.textUsername.text = user.username
@@ -128,8 +128,24 @@ class HomeActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.btnCarregarFeed.setOnClickListener {
             val cidade = binding.editBuscarCidade.text.toString().trim()
-            if (cidade.isEmpty()) carregarFeed(carregarMais = true)
-            else buscarPorCidade(cidade)
+
+            // Fade out
+            binding.recyclerView.animate()
+                .alpha(0f)
+                .setDuration(200)
+                .withEndAction {
+                    if (cidade.isEmpty()) {
+                        carregarFeed(carregarMais = false)
+                    } else {
+                        buscarPorCidade(cidade)
+                    }
+                    // Fade in após carregar
+                    binding.recyclerView.animate()
+                        .alpha(1f)
+                        .setDuration(300)
+                        .start()
+                }
+                .start()
         }
 
         binding.btnNovoPost.setOnClickListener {

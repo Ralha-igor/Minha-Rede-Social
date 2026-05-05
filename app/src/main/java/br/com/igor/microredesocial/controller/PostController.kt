@@ -1,7 +1,6 @@
 package br.com.igor.microredesocial.controller
 
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.widget.ImageView
 import br.com.igor.microredesocial.helper.Base64Converter
 import br.com.igor.microredesocial.model.Post
@@ -15,20 +14,18 @@ class PostController {
 
     fun criarPost(
         texto: String,
-        imageUri: Uri? = null,
         imageView: ImageView? = null,
         city: String = "",
         lat: Double = 0.0,
         lng: Double = 0.0,
         onResult: (Boolean, String?) -> Unit
     ) {
-        val email = auth.currentUser?.email
-        if (email == null) {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
             onResult(false, "Usuário não autenticado")
             return
         }
 
-        // Converte imagem para Base64 se houver
         val imagemBase64 = if (imageView != null) {
             val drawable = imageView.drawable
             if (drawable != null && drawable is BitmapDrawable) {
@@ -37,16 +34,14 @@ class PostController {
         } else ""
 
         val userController = UserController()
-        userController.buscarPerfil(email) { user ->
-            android.util.Log.d("DEBUG_POST", "email buscado: $email")
-            android.util.Log.d("DEBUG_POST", "user retornado: $user")
+        userController.buscarPerfil(uid) { user ->
             if (user == null) {
-                onResult(false, "Usuário não encontrado - email: $email")
+                onResult(false, "Usuário não encontrado")
                 return@buscarPerfil
             }
 
             val post = hashMapOf(
-                "userId" to email,
+                "userId" to uid,
                 "username" to user.username,
                 "fotoPerfil" to (user.fotoPerfil ?: ""),
                 "texto" to texto,
@@ -64,7 +59,6 @@ class PostController {
                 .addOnSuccessListener { onResult(true, null) }
                 .addOnFailureListener { e -> onResult(false, e.message) }
         }
-
     }
 
     private var ultimoDocumento: com.google.firebase.firestore.DocumentSnapshot? = null
@@ -77,7 +71,7 @@ class PostController {
         if (carrregarMais && ultimoDocumento != null) {
             query = query.startAfter(ultimoDocumento!!)
         } else {
-            ultimoDocumento = null // reset
+            ultimoDocumento = null
         }
 
         query.get()
@@ -92,8 +86,8 @@ class PostController {
                         fotoPerfil = document.getString("fotoPerfil"),
                         imagemPost = document.getString("imagemPost"),
                         timestamp = document.getLong("timestamp") ?: 0L,
-                        likesCount = (document.get("likesCount") as? Long)?.toInt() ?: 0,
-                        comentarioCount = (document.get("comentarioCount") as? Long)?.toInt() ?: 0,
+                        likesCount = document.getLong("likesCount")?.toInt() ?: 0,
+                        comentarioCount = document.getLong("comentarioCount")?.toInt() ?: 0,
                         city = document.getString("city") ?: "",
                         lat = document.getDouble("lat") ?: 0.0,
                         lng = document.getDouble("lng") ?: 0.0
@@ -117,37 +111,33 @@ class PostController {
                 for (document in documents) {
                     try {
                         val post = Post(
+                            postId = document.id,
                             userId = document.getString("userId") ?: "",
                             username = document.getString("username") ?: "",
                             texto = document.getString("texto") ?: "",
                             fotoPerfil = document.getString("fotoPerfil"),
                             imagemPost = document.getString("imagemPost"),
                             timestamp = document.getLong("timestamp") ?: 0L,
-
-                            // ✅ CORREÇÃO: likesCount e comentarioCount devem usar getLong()
                             likesCount = document.getLong("likesCount")?.toInt() ?: 0,
                             comentarioCount = document.getLong("comentarioCount")?.toInt() ?: 0,
-
                             city = document.getString("city") ?: "",
                             lat = document.getDouble("lat") ?: 0.0,
                             lng = document.getDouble("lng") ?: 0.0
                         )
                         posts.add(post)
                     } catch (e: Exception) {
-                        // Evita que um post mal formatado quebre a lista inteira
                         e.printStackTrace()
                     }
                 }
                 onResult(posts)
             }
-            .addOnFailureListener {
-                onResult(ArrayList())
-            }
+            .addOnFailureListener { onResult(ArrayList()) }
     }
 
     fun deletarPost(postId: String, onResult: (Boolean, String?) -> Unit) {
-        val emailAtual = auth.currentUser?.email
-        if (emailAtual == null) {
+        val uid = auth.currentUser?.uid
+        val email = auth.currentUser?.email
+        if (uid == null) {
             onResult(false, "Usuário não autenticado")
             return
         }
@@ -160,9 +150,9 @@ class PostController {
                     return@addOnSuccessListener
                 }
 
-                // Só permite deletar se for o dono do post
                 val userId = document.getString("userId")
-                if (userId != emailAtual) {
+                // Aceita tanto UID quanto email (compatibilidade com posts antigos)
+                if (userId != uid && userId != email) {
                     onResult(false, "Você não pode deletar este post")
                     return@addOnSuccessListener
                 }
@@ -174,10 +164,9 @@ class PostController {
             }
             .addOnFailureListener { e -> onResult(false, e.message) }
     }
-
     fun atualizarPost(postId: String, novoTexto: String, onResult: (Boolean, String?) -> Unit) {
-        val emailAtual = auth.currentUser?.email
-        if (emailAtual == null) {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
             onResult(false, "Usuário não autenticado")
             return
         }

@@ -10,7 +10,7 @@
         android:id="@+id/textHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nova Publicação"
+        android:text="Editar Publicação"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
@@ -25,7 +25,7 @@
         android:layout_marginTop="16dp"
         android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/textHeader"
-        app:layout_constraintBottom_toTopOf="@id/buttonPostar">
+        app:layout_constraintBottom_toTopOf="@id/layoutBotoes">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                 android:padding="16dp">
 
                 <EditText
-                    android:id="@+id/editPost"
+                    android:id="@+id/editTextoPost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="O que você está pensando?"
@@ -54,73 +54,39 @@
                     android:textColor="#FFFFFF"
                     android:inputType="textMultiLine|textCapSentences"
                     android:importantForAutofill="no" />
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imagePreview"
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:layout_marginTop="12dp"
-                    android:visibility="gone"
-                    android:scaleType="centerCrop"
-                    android:background="#7F39FB"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:strokeColor="#FFFFFF"
-                    app:strokeWidth="1dp"/>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/buttonSelecionarImagem"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="20dp"
-                android:text="Adicionar Foto"
-                android:textColor="#BB86FC"
-                app:strokeColor="#BB86FC"
-                android:textAllCaps="false"
-                app:icon="@android:drawable/ic_menu_camera"
-                app:iconTint="#BB86FC"
-                app:cornerRadius="12dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="32dp"
-                android:padding="4dp">
-
-                <TextView
-                    android:id="@+id/textCidade"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="📍 Localização: não detectada"
-                    android:textColor="#999999"
-                    android:textSize="14sp" />
-
-                <Button
-                    android:id="@+id/buttonLocalizacao"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ativar minha localização"
-                    android:textAllCaps="false"
-                    android:textColor="#BB86FC" />
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/buttonPostar"
+    <LinearLayout
+        android:id="@+id/layoutBotoes"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_margin="24dp"
-        android:text="PUBLICAR"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:backgroundTint="#BB86FC"
-        app:cornerRadius="16dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/btnSalvarEdicao"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="SALVAR ALTERAÇÕES"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:backgroundTint="#BB86FC"
+            app:cornerRadius="16dp" />
+
+        <Button
+            android:id="@+id/btnCancelarEdicao"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Cancelar"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

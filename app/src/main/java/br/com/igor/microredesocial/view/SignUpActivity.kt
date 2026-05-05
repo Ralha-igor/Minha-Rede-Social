@@ -29,13 +29,11 @@ class SignUpActivity : AppCompatActivity() {
             val confirmPassword = binding.edtConfirmPassword.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
-
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
             if (password != confirmPassword) {
-
                 Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -43,19 +41,18 @@ class SignUpActivity : AppCompatActivity() {
             firebaseAuth
                 .createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-
                     if (task.isSuccessful) {
-                        // Salva o usuário no Firestore após criar a conta
+                        val uid = firebaseAuth.currentUser?.uid ?: return@addOnCompleteListener
                         val userController = UserController()
                         val novoUsuario = User(
                             email = email,
-                            username = "",        // preenchido na ProfileActivity
-                            nomecompleto = "",    // preenchido na ProfileActivity
+                            username = "",
+                            nomecompleto = "",
                             fotoPerfil = null,
                             dataCriacao = System.currentTimeMillis()
                         )
 
-                        userController.salvarPerfil(novoUsuario) { sucesso, erro ->
+                        userController.salvarPerfil(uid, novoUsuario) { sucesso, erro ->
                             if (sucesso) {
                                 startActivity(Intent(this, ProfileActivity::class.java))
                                 finish()
@@ -64,7 +61,6 @@ class SignUpActivity : AppCompatActivity() {
                             }
                         }
                     }
-
                 }
         }
     }
