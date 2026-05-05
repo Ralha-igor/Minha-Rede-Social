@@ -125,12 +125,6 @@ service cloud.firestore {
 
 ---
 
-## 📄 Licença
-
-Este projeto está licenciado sob a [MIT License](LICENSE).
-
----
-
 ## 👤 Sobre Mim
 
 Desenvolvido por **Igor Ralha Gomes** — estudante de Análise e Desenvolvimento de Sistemas no IFSP – Araraquara.
