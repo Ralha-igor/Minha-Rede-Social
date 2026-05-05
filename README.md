@@ -127,6 +127,6 @@ service cloud.firestore {
 
 ## 👤 Sobre Mim
 
-Desenvolvido por **Igor Ralha Gomes** — estudante de Análise e Desenvolvimento de Sistemas no IFSP – Araraquara.
+Desenvolvido por **Igor Ralha Guerreiro Gomes** — estudante de Análise e Desenvolvimento de Sistemas no IFSP – Araraquara.
 
 📫 [LinkedIn](https://www.linkedin.com/in/SEU_LINKEDIN) · [GitHub](https://github.com/Ralha-igor)
