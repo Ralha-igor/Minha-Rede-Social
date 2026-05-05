@@ -11,7 +11,7 @@ Aplicativo Android de rede social desenvolvido como projeto prático da discipli
 
 ## 📋 Descrição
 
-O **MicroRedeSocial** é um aplicativo de feed social onde usuários podem criar posts com texto, imagem e localização GPS, além de editar seu perfil e interagir com a comunidade. O projeto utiliza autenticação real, persistência em nuvem via Firestore e carregamento de imagens com Glide.
+O **Konekt** é um aplicativo de feed social onde usuários podem criar posts com texto, imagem e localização GPS, além de editar seu perfil e interagir com a comunidade. O projeto utiliza autenticação real, persistência em nuvem via Firestore e carregamento de imagens com Glide.
 
 ---
 
