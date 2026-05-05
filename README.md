@@ -36,7 +36,7 @@ O **Konekt** é um aplicativo de feed social onde usuários podem criar posts co
 
 | Posts | Editar | Pesquisas |
 |-------|--------|-----------|
-| ![Posts](img/Posts.png) | ![Editar](img/Editar.png) | ![Pesquisas](Screen_recording_20260427_112847.webm) |
+| ![Posts](img/Posts.png) | ![Editar](img/Editar.png) | ![Pesquisas](img/Pesquisas.png) |
 
 ---
 
