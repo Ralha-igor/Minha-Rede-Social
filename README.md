@@ -1,4 +1,4 @@
-# 📱 MicroRedeSocial
+# 📱 MicroRedeSocial Konekt
 
 Aplicativo Android de rede social desenvolvido como projeto prático da disciplina de Desenvolvimento Mobile no IFSP – Araraquara.
 
